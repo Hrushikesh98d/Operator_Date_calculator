@@ -12,6 +12,8 @@
             display: none;
         }
     </style>
+    <!-- Include Luxon library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.0.0/luxon.min.js"></script>
 </head>
 <body>
 <h1>Date Manipulation App</h1>
@@ -21,12 +23,20 @@
         <input type="datetime-local" id="inputDateTime" required>
     </div>
 
+    <div class="form-group">
+        <label for="timeZone">Select Time Zone:</label>
+        <select id="timeZone">
+            <!-- Time zones will be added here by JavaScript -->
+        </select>
+    </div>
+
     <div id="addOptions" class="hidden">
         <div class="form-group">
             <label for="addDays">Add Days:</label>
             <select id="addDays">
                 <option value="0">0</option>
-                <!-- Add more options as needed -->
+                <option value="1">1</option>
+                <option value="2">2</option>
                 <option value="30">30</option>
             </select>
         </div>
@@ -37,15 +47,6 @@
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
                 <option value="12">12</option>
             </select>
         </div>
@@ -54,7 +55,8 @@
             <label for="addYears">Add Years:</label>
             <select id="addYears">
                 <option value="0">0</option>
-                <!-- Add more options as needed -->
+                <option value="1">1</option>
+                <option value="2">2</option>
                 <option value="10">10</option>
             </select>
         </div>
@@ -63,7 +65,8 @@
             <label for="addHours">Add Hours:</label>
             <select id="addHours">
                 <option value="0">0</option>
-                <!-- Add more options as needed -->
+                <option value="1">1</option>
+                <option value="2">2</option>
                 <option value="23">23</option>
             </select>
         </div>
@@ -72,7 +75,8 @@
             <label for="addMinutes">Add Minutes:</label>
             <select id="addMinutes">
                 <option value="0">0</option>
-                <!-- Add more options as needed -->
+                <option value="1">1</option>
+                <option value="2">2</option>
                 <option value="59">59</option>
             </select>
         </div>
@@ -81,7 +85,8 @@
             <label for="addSeconds">Add Seconds:</label>
             <select id="addSeconds">
                 <option value="0">0</option>
-                <!-- Add more options as needed -->
+                <option value="1">1</option>
+                <option value="2">2</option>
                 <option value="59">59</option>
             </select>
         </div>

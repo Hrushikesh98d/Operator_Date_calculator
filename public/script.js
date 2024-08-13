@@ -1,36 +1,52 @@
-document.getElementById('inputDateTime').addEventListener('change', function() {
-    const dateTimeInput = document.getElementById('inputDateTime').value;
-    if (dateTimeInput) {
-        document.getElementById('addOptions').classList.remove('hidden');
-    }
-});
+document.addEventListener('DOMContentLoaded', function() {
+    // Populate time zones
+    const timeZoneSelect = document.getElementById('timeZone');
+    const timeZones = Intl.supportedValuesOf('timeZone'); // Get the list of supported time zones
+    timeZones.forEach(zone => {
+        const option = document.createElement('option');
+        option.value = zone;
+        option.textContent = zone;
+        timeZoneSelect.appendChild(option);
+    });
 
-document.getElementById('dateForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+    // Set default time zone to EST (which is 'America/New_York')
+    timeZoneSelect.value = 'America/New_York'; // Default to EST
 
-    const inputDateTimeValue = document.getElementById('inputDateTime').value;
-    const inputDate = new Date(inputDateTimeValue);
+    document.getElementById('inputDateTime').addEventListener('change', function() {
+        const dateTimeInput = document.getElementById('inputDateTime').value;
+        if (dateTimeInput) {
+            document.getElementById('addOptions').classList.remove('hidden');
+        }
+    });
 
-    // Convert input date to EST
-    const offset = -5 * 60; // EST offset in minutes (without considering DST)
-    const estDate = new Date(inputDate.getTime() + (offset * 60 * 1000));
+    document.getElementById('dateForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    const addDays = parseInt(document.getElementById('addDays').value);
-    const addMonths = parseInt(document.getElementById('addMonths').value);
-    const addYears = parseInt(document.getElementById('addYears').value);
-    const addHours = parseInt(document.getElementById('addHours').value);
-    const addMinutes = parseInt(document.getElementById('addMinutes').value);
-    const addSeconds = parseInt(document.getElementById('addSeconds').value);
+        const inputDateTimeValue = document.getElementById('inputDateTime').value;
+        const timeZone = document.getElementById('timeZone').value;
 
-    // Calculate new date
-    estDate.setDate(estDate.getDate() + addDays);
-    estDate.setMonth(estDate.getMonth() + addMonths);
-    estDate.setFullYear(estDate.getFullYear() + addYears);
-    estDate.setHours(estDate.getHours() + addHours);
-    estDate.setMinutes(estDate.getMinutes() + addMinutes);
-    estDate.setSeconds(estDate.getSeconds() + addSeconds);
+        // Parse the input date in the local time zone (which is EST here)
+        const inputDate = luxon.DateTime.fromISO(inputDateTimeValue, { zone: 'America/New_York' });
 
-    document.getElementById('outputHeader').classList.remove('hidden');
-    document.getElementById('outputDate').classList.remove('hidden');
-    document.getElementById('outputDate').textContent = estDate.toISOString();
+        // Convert to the selected time zone
+        const timeZoneDate = inputDate.setZone(timeZone);
+
+        const addDays = parseInt(document.getElementById('addDays').value, 10);
+        const addMonths = parseInt(document.getElementById('addMonths').value, 10);
+        const addYears = parseInt(document.getElementById('addYears').value, 10);
+        const addHours = parseInt(document.getElementById('addHours').value, 10);
+        const addMinutes = parseInt(document.getElementById('addMinutes').value, 10);
+        const addSeconds = parseInt(document.getElementById('addSeconds').value, 10);
+
+        // Calculate new date
+        const newDate = timeZoneDate
+            .plus({ days: addDays, months: addMonths, years: addYears, hours: addHours, minutes: addMinutes, seconds: addSeconds });
+
+        // Format the output date in the selected time zone
+        const outputDate = newDate.toFormat('yyyy-MM-dd HH:mm:ss ZZZZ');
+
+        document.getElementById('outputHeader').classList.remove('hidden');
+        document.getElementById('outputDate').classList.remove('hidden');
+        document.getElementById('outputDate').textContent = outputDate;
+    });
 });
